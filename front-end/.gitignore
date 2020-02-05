@@ -22,5 +22,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Ignore index file with google API key 
-index.html
+# api keys
+.env
