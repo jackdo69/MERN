@@ -27,15 +27,7 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occurred!" });
 });
 
-// //Ignore the favicon
-// const ignoreFavicon = (req, res, next) => {
-//   if (req.originalUrl === "/favicon.ico") {
-//     res.status(204).json({ nope: true });
-//   } else {
-//     next();
-//   }
-// };
-// app.use(ignoreFavicon);
+
 mongoose
   .connect(`mongodb+srv://jack:${PASSWORD}@cluster0-vfzco.mongodb.net/places?retryWrites=true&w=majority`)
   .then(() => {

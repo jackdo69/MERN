@@ -12,7 +12,7 @@ router.post(
       .isEmpty(),
     check("email")
       .normalizeEmail()
-      .isEmail(), //Test@test.com => test@test.com
+      .isEmail(), 
     check("password").isLength({ min: 6 })
   ],
   usersControllers.signup
