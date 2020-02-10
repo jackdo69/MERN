@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const PASSWORD = process.env.MONGO_DB_PASSWORD;
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -9,6 +9,18 @@ const HttpError = require("./models/http-error");
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    '*'
+  );
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+
+  next();
+});
+
 app.use("/api/places", placesRoutes); //Filter the routes
 app.use("/api/users", usersRoutes); //Filter the routes
 
@@ -27,9 +39,10 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occurred!" });
 });
 
-
 mongoose
-  .connect(`mongodb+srv://jack:${PASSWORD}@cluster0-vfzco.mongodb.net/places?retryWrites=true&w=majority`)
+  .connect(
+    `mongodb+srv://jack:${PASSWORD}@cluster0-vfzco.mongodb.net/places?retryWrites=true&w=majority`
+  )
   .then(() => {
     app.listen(5000);
   })

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import {AuthContext} from '../../shared/context/auth-context';
+import { AuthContext } from "../../shared/context/auth-context";
 
 import { useForm } from "../../shared/hooks/form-hook";
 
@@ -14,7 +14,7 @@ import {
 import "./Auth.css";
 
 const Auth = () => {
-    const auth = useContext(AuthContext);
+  const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -34,7 +34,7 @@ const Auth = () => {
     if (!isLoginMode) {
       setFormData(
         {
-            ...formState.inputs,
+          ...formState.inputs,
           name: undefined
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid
@@ -54,9 +54,28 @@ const Auth = () => {
     setIsLoginMode(prevMode => !prevMode);
   };
 
-  const authSubmitHandler = event => {
+  const authSubmitHandler = async event => {
     event.preventDefault();
-    console.log(formState.inputs);
+
+    if (isLoginMode) {
+    } else {
+      try {
+        const response = await fetch("http://localhost:5000/api/users/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            name: formState.inputs.name.value,
+            email: formState.inputs.email.value,
+            password: formState.inputs.password.value
+          })
+        });
+
+        const responseData = await response.json();
+        console.log(responseData);
+      } catch {}
+    }
     auth.login();
   };
 
