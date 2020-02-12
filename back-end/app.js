@@ -1,5 +1,6 @@
 require("dotenv").config();
 const fs = require("fs");
+const path = require("path");
 const PASSWORD = process.env.MONGO_DB_PASSWORD;
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -10,6 +11,8 @@ const HttpError = require("./models/http-error");
 const app = express();
 
 app.use(bodyParser.json());
+
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -33,7 +36,6 @@ app.use((error, req, res, next) => {
   if (req.file) {
     fs.unlink(req.file.path, () => {
       console.log(err);
-      
     });
   }
 
