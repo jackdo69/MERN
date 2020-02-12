@@ -2,7 +2,6 @@ const HttpError = require("../models/http-error");
 const { validationResult } = require("express-validator");
 const User = require("../models/user");
 
-
 const getUsers = async (req, res, next) => {
   let users;
   try {
@@ -49,8 +48,7 @@ const signup = async (req, res, next) => {
   const createdUser = new User({
     name,
     email,
-    image:
-      "https://images.unsplash.com/photo-1530645298377-82c8416d3f90?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1534&q=80",
+    image: req.file.path,
     password,
     places: []
   });
@@ -87,7 +85,10 @@ const login = async (req, res, next) => {
     return next(error);
   }
 
-  res.json({ message: "Logged in!", user: existingUser.toObject({getters: true}) });
+  res.json({
+    message: "Logged in!",
+    user: existingUser.toObject({ getters: true })
+  });
 };
 
 exports.getUsers = getUsers;

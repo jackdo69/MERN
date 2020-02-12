@@ -1,4 +1,5 @@
 require("dotenv").config();
+const fs = require("fs");
 const PASSWORD = process.env.MONGO_DB_PASSWORD;
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -11,12 +12,9 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    '*'
-  );
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
 
   next();
 });
@@ -32,6 +30,13 @@ app.use((req, res, next) => {
 
 //Error for any other issues
 app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, () => {
+      console.log(err);
+      
+    });
+  }
+
   if (res.headerSent) {
     return next(error);
   }
